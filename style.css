@@ -55,3 +55,12 @@ table {
 #content {
   clear: both;
 }
+
+ul {
+    padding-left: 15px;
+}​
+
+ul li {
+  margin: 0px;
+  padding: 0px;
+}
