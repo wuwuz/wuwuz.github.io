@@ -18,7 +18,8 @@ h3 {
 a, a:visited {
   font-weight: bold;
   text-decoration: none;
-  color: #990000;
+  color: #800;
+  text-decoration: underline;
 }
 
 a:hover {
