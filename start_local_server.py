@@ -25,9 +25,18 @@ class MyHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
         self.send_header('Access-Control-Allow-Headers', 'Content-Type')
         super().end_headers()
 
+    def do_GET(self):
+        # Handle favicon requests gracefully
+        if self.path == '/favicon.ico':
+            self.send_response(204)  # No Content
+            self.end_headers()
+            return
+        super().do_GET()
+
     def log_message(self, format, *args):
-        # Suppress verbose logging
-        pass
+        # Suppress verbose logging for favicon requests
+        if '/favicon.ico' not in args[0] if args else True:
+            pass  # Suppress all logging for cleaner output
 
 def main():
     # Change to script directory
@@ -36,24 +45,34 @@ def main():
     Handler = MyHTTPRequestHandler
     
     try:
-        with socketserver.TCPServer(("", PORT), Handler) as httpd:
-            url = f"http://localhost:{PORT}"
-            print("=" * 60)
-            print("Local development server started!")
-            print("=" * 60)
-            print(f"Server running at: {url}")
-            print(f"Serving directory: {os.getcwd()}")
-            print("\nPress Ctrl+C to stop the server")
-            print("=" * 60)
-            
-            # Try to open browser automatically
-            try:
-                webbrowser.open(url)
-                print(f"\nOpening {url} in your browser...")
-            except:
-                print(f"\nPlease manually open {url} in your browser")
-            
+        # Allow address reuse to prevent "Address already in use" errors
+        socketserver.TCPServer.allow_reuse_address = True
+        httpd = socketserver.TCPServer(("", PORT), Handler)
+        
+        url = f"http://localhost:{PORT}"
+        print("=" * 60)
+        print("Local development server started!")
+        print("=" * 60)
+        print(f"Server running at: {url}")
+        print(f"Serving directory: {os.getcwd()}")
+        print("\nPress Ctrl+C to stop the server")
+        print("=" * 60)
+        
+        # Try to open browser automatically
+        try:
+            webbrowser.open(url)
+            print(f"\nOpening {url} in your browser...")
+        except:
+            print(f"\nPlease manually open {url} in your browser")
+        
+        try:
             httpd.serve_forever()
+        except KeyboardInterrupt:
+            print("\n\nStopping server...")
+            httpd.shutdown()
+            httpd.server_close()
+            print("Server stopped. Port 8000 is now free.")
+            sys.exit(0)
             
     except KeyboardInterrupt:
         print("\n\nServer stopped.")

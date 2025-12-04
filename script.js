@@ -36,8 +36,8 @@ function loadAllContentFromExcel() {
         return;
     }
 
-    // Fetch the Excel file
-    fetch('publications.xlsx')
+    // Fetch the Excel file with cache-busting
+    fetch('publications.xlsx?' + new Date().getTime())
         .then(response => {
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
