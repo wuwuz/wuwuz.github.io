@@ -71,7 +71,7 @@ def main():
             print("\n\nStopping server...")
             httpd.shutdown()
             httpd.server_close()
-            print("Server stopped. Port 8000 is now free.")
+            print(f"Server stopped. Port {PORT} is now free.")
             sys.exit(0)
             
     except KeyboardInterrupt:
