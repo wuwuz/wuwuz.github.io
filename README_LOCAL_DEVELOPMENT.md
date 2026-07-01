@@ -16,8 +16,8 @@ You have several options to run a local web server:
    ```
 
 2. The script will automatically:
-   - Start a web server on port 8000
-   - Open your browser to `http://localhost:8000`
+   - Start a web server on port 8001
+   - Open your browser to `http://localhost:8001`
 
 3. Your website will now work perfectly with the Excel file loading!
 
@@ -70,19 +70,18 @@ If you use VS Code:
 ## Testing Checklist
 
 - [ ] Server is running
-- [ ] Open `http://localhost:8000` (or the port your server uses)
+- [ ] Open `http://localhost:8001` when using `start_local_server.py` (or the port your server uses)
 - [ ] Publications load successfully
-- [ ] Filters work correctly
+- [ ] Navigation links and scroll-to-top behavior work correctly
 - [ ] No console errors
 
 ## Troubleshooting
 
 **Port already in use?**
-- Change the port number in `start_local_server.py` (line with `PORT = 8000`)
+- Change the port number in `start_local_server.py` (line with `PORT = 8001`)
 - Or stop the other process using that port
 
 **Still getting errors?**
 - Check browser console (F12) for specific error messages
 - Ensure `publications.xlsx` is in the same directory as `index.html`
 - Verify the Excel file has the correct column headers
-

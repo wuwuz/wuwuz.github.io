@@ -3,6 +3,9 @@ let publicationsData = [];
 
 // ===== Smooth Scrolling =====
 document.addEventListener('DOMContentLoaded', function() {
+    updateNavbarOffset();
+    initNavbarResizeObserver();
+
     // Smooth scroll for anchor links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
@@ -26,6 +29,29 @@ document.addEventListener('DOMContentLoaded', function() {
     // ===== Copy Email to Clipboard =====
     initEmailCopy();
 });
+
+// ===== Keep page content clear of fixed navbar =====
+function updateNavbarOffset() {
+    const navbar = document.querySelector('.navbar');
+    if (!navbar) return;
+
+    document.documentElement.style.setProperty('--navbar-offset', `${navbar.offsetHeight}px`);
+}
+
+function initNavbarResizeObserver() {
+    const navbar = document.querySelector('.navbar');
+    if (!navbar) return;
+
+    if (window.ResizeObserver) {
+        const observer = new ResizeObserver(updateNavbarOffset);
+        observer.observe(navbar);
+    } else {
+        window.addEventListener('resize', updateNavbarOffset);
+    }
+
+    window.addEventListener('load', updateNavbarOffset);
+    window.addEventListener('orientationchange', updateNavbarOffset);
+}
 
 // ===== Load All Content from Excel File =====
 function loadAllContentFromExcel() {
@@ -76,7 +102,7 @@ function loadAllContentFromExcel() {
                     <p><strong>Solution:</strong> Use a local web server:</p>
                     <ol style="text-align: left; margin: 1rem 2rem;">
                         <li>Run: <code>python3 start_local_server.py</code></li>
-                        <li>Open: <code>http://localhost:8000</code> in your browser</li>
+                        <li>Open: <code>http://localhost:8001</code> in your browser</li>
                     </ol>
                     <p><small>Or use any HTTP server: <code>python3 -m http.server</code> or <code>npx serve</code></small></p>
                 `;
@@ -462,4 +488,3 @@ function showNotification(message) {
         }, 300);
     }, 2000);
 }
-

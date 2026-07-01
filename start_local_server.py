@@ -6,7 +6,7 @@ This allows the website to load Excel files without CORS issues.
 Usage:
     python3 start_local_server.py
 
-Then open http://localhost:8000 in your browser.
+Then open http://localhost:8001 in your browser.
 """
 
 import http.server
@@ -87,4 +87,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
