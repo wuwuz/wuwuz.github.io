@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Script to generate publications.xlsx with multiple sheets (Publications, Preprints, Talks).
+Script to generate publications.xlsx with multiple sheets (Publications / Preprints, Other Projects, Talks).
 This creates an Excel file that can be used by the website to load all content dynamically.
 """
 
@@ -10,6 +10,69 @@ from openpyxl.styles import Font, PatternFill
 
 # ===== PUBLICATIONS DATA =====
 publications = [
+    {
+        "Year": "2026",
+        "Venue": "VLDB",
+        "Title": "Bifrost: A Much Simpler Secure Two-Party Data Join Protocol for Secure Data Analytics",
+        "Link": "https://wuwuz.github.io",
+        "Authors": "Shuyu Chen, Mingxun Zhou, Haoyu Niu, Guopeng Lin, Weili Han",
+        "Note": "",
+        "CodeLink": ""
+    },
+    {
+        "Year": "2026",
+        "Venue": "ICLR",
+        "Title": "PMark: Towards Robust and Distortion-free Semantic-level Watermarking with Channel Constraints",
+        "Link": "https://arxiv.org/abs/2509.21057",
+        "Authors": "Jiahao Huo, Shuliang Liu, Bin Wang, Junyan Zhang, Yibo Yan, Aiwei Liu, Xuming Hu, Mingxun Zhou",
+        "Note": "",
+        "CodeLink": ""
+    },
+    {
+        "Year": "2026",
+        "Venue": "Preprint",
+        "Title": "Achieving Tight Space-Time Tradeoff and Practical Performance in Preprocessing PIR with Multi-level Recursion",
+        "Link": "https://eprint.iacr.org/2026/1273",
+        "Authors": "Chang Shi, Bo Peng, Zhechen Li, Cheng Hong, Mingxun Zhou",
+        "Note": "",
+        "CodeLink": ""
+    },
+    {
+        "Year": "2026",
+        "Venue": "Preprint",
+        "Title": "SAMark: A Self-Anchored Text Watermarking with Paragraph-Level Paraphrase Robustness",
+        "Link": "https://arxiv.org/abs/2605.25796",
+        "Authors": "Jiahao Huo, Wenjie Qu, Yibo Yan, Kening Zheng, Jiaheng Zhang, Xuming Hu, Philip S. Yu, Mingxun Zhou",
+        "Note": "",
+        "CodeLink": ""
+    },
+    {
+        "Year": "2026",
+        "Venue": "Preprint",
+        "Title": "KBF: Knowledge Boundary as Fingerprint for Language Model and Black-Box API Auditing",
+        "Link": "https://arxiv.org/abs/2605.29524",
+        "Authors": "Yijia Fang, Yiqing Feng, Bingyu Li, Mingxun Zhou",
+        "Note": "",
+        "CodeLink": ""
+    },
+    {
+        "Year": "2025",
+        "Venue": "S&P",
+        "Title": "Zelda: Efficient Multi-server Preprocessing PIR with Unconditional Security",
+        "Link": "https://eprint.iacr.org/2025/1340",
+        "Authors": "Ashrujit Ghoshal, Mingxun Zhou, Bo Peng, Elaine Shi",
+        "Note": "(Randomized Author Order)",
+        "CodeLink": ""
+    },
+    {
+        "Year": "2025",
+        "Venue": "Preprint",
+        "Title": "MaxShapley: Towards Incentive-compatible Generative Search with Fair Context Attribution",
+        "Link": "https://arxiv.org/abs/2512.05958",
+        "Authors": "Sara Patel, Mingxun Zhou, Giulia Fanti",
+        "Note": "",
+        "CodeLink": ""
+    },
     {
         "Year": "2025",
         "Venue": "Eurocrypt",
@@ -120,16 +183,8 @@ publications = [
     }
 ]
 
-# ===== PREPRINTS DATA =====
+# ===== OTHER PROJECTS DATA =====
 preprints = [
-    {
-        "Title": "PMark: Towards Robust and Distortion-free Semantic-level Watermarking with Channel Constraints",
-        "Link": "https://arxiv.org/abs/2509.21057",
-        "Authors": "Jiahao Huo, Shuliang Liu, Bin Wang, Junyan Zhang, Yibo Yan, Aiwei Liu, Xuming Hu, Mingxun Zhou",
-        "Year": "2025",
-        "Note": "",
-        "Type": ""
-    },
     {
         "Title": "Private Information Retrieval and Searching with Sublinear Costs",
         "Link": "https://csd.cmu.edu/sites/default/files/phd-thesis/CMU-CS-25-115.pdf",
@@ -302,4 +357,3 @@ if __name__ == "__main__":
         print("   Please install it with: pip install openpyxl")
     except Exception as e:
         print(f"❌ Error creating Excel file: {e}")
-

@@ -196,12 +196,11 @@ function loadTalksSheet(jsonData) {
 function renderPublications(data) {
     const container = document.getElementById('publications-container');
     
-    // Sort by year (descending), then by venue
+    // Sort by year (descending), preserving spreadsheet order within each year.
     const sortedData = [...data].sort((a, b) => {
         const yearA = parseInt(a.Year) || 0;
         const yearB = parseInt(b.Year) || 0;
-        if (yearB !== yearA) return yearB - yearA;
-        return (a.Venue || '').localeCompare(b.Venue || '');
+        return yearB - yearA;
     });
 
     // Clear container

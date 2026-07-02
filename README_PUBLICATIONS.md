@@ -1,17 +1,17 @@
 # Publications Excel File Setup
 
-This website loads **all academic content** (Publications, Preprints, Talks) dynamically from a single Excel file (`publications.xlsx`) with multiple sheets. This makes it easy to update your content without editing HTML.
+This website loads academic content dynamically from a single Excel file (`publications.xlsx`) with multiple sheets. The homepage currently renders the **Publications / Preprints** and **Talks** sections from this file.
 
 ## Excel File Structure
 
 The `publications.xlsx` file contains **three sheets**:
 
 ### 📄 Publications Sheet
-For peer-reviewed publications.
+For peer-reviewed publications and active preprints shown in the combined **Publications / Preprints** homepage section.
 
 **Columns:**
 - **Year**: Publication year (e.g., "2025")
-- **Venue**: Conference/journal name (e.g., "Eurocrypt", "ICLR")
+- **Venue**: Conference/journal name or status (e.g., "Eurocrypt", "ICLR", "Preprint")
 - **Title**: Publication title
 - **Link**: URL to the publication (full URL)
 - **Authors**: Author list (your name will be automatically bolded if it contains "Mingxun Zhou")
@@ -24,7 +24,7 @@ For peer-reviewed publications.
 | 2025 | Eurocrypt | Pseudorandom Functions... | https://... | Ashrujit Ghoshal, Mingxun Zhou, ... | (Randomized Author Order) | |
 
 ### 📄 Preprints Sheet
-For preprints, theses, and other projects.
+For older preprints, theses, and other projects retained in the workbook. The current homepage does not show this as a separate section.
 
 **Columns:**
 - **Title**: Publication title
@@ -93,8 +93,8 @@ The website will automatically load the updated content when you refresh the pag
 - Or use `<strong>Mingxun Zhou</strong>` if you want manual control
 
 ### Sorting
-- Publications are sorted by year (newest first), then by venue
-- Preprints are sorted by year (newest first), then by title
+- Publications / preprints are sorted by year (newest first), preserving spreadsheet order within each year
+- The separate Preprints sheet is retained for older projects and theses
 - Talks are sorted by date (newest first)
 
 ### Links
@@ -123,9 +123,9 @@ When testing locally, make sure `publications.xlsx` is in the same directory as 
 
 ```
 publications.xlsx
-├── Publications sheet (12+ rows)
-├── Preprints sheet (4+ rows)
+├── Publications sheet (19+ rows)
+├── Preprints sheet (3+ rows)
 └── Talks sheet (8+ rows)
 ```
 
-All three sections will load automatically from the Excel file when you open the website!
+The homepage loads the combined Publications / Preprints section and Talks section automatically from the Excel file.
