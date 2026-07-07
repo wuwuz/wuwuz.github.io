@@ -30,6 +30,15 @@ publications = [
     },
     {
         "Year": "2026",
+        "Venue": "ICML",
+        "Title": "Continual Learning With Participation Privacy: An Auditable Buffering-Aggregation Recipe",
+        "Link": "https://openreview.net/forum?id=XfmTSEvETM",
+        "Authors": "T-H. Hubert Chan, Elaine Shi, Mengshi Zhao, Mingxun Zhou",
+        "Note": "",
+        "CodeLink": ""
+    },
+    {
+        "Year": "2026",
         "Venue": "Preprint",
         "Title": "Achieving Tight Space-Time Tradeoff and Practical Performance in Preprocessing PIR with Multi-level Recursion",
         "Link": "https://eprint.iacr.org/2026/1273",
