@@ -4,11 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mingxun Zhou (周铭洵) - HKUST</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👤</text></svg>">
     <link rel="stylesheet" type="text/css" href="style.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
     <!-- SheetJS library for reading Excel files -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
@@ -16,11 +12,12 @@
 <body>
     <nav class="navbar">
         <div class="nav-container">
-            <a href="#" class="nav-brand">Mingxun Zhou (周铭洵)</a>
+            <a href="./" class="nav-brand">Mingxun Zhou (周铭洵)</a>
             <div class="nav-links">
                 <a href="#education">Education</a>
                 <a href="#grants">Grants</a>
                 <a href="#publications">Publications / Preprints</a>
+                <a href="#students">Students</a>
                 <a href="#talks">Talks</a>
                 <a href="#teaching">Teaching</a>
                 <a href="#services">Services</a>
@@ -45,7 +42,10 @@
                                 Room 3508
                             </div>
                             <div class="contact-item">
-                                <a href="Mingxun_Zhou_CV.pdf" class="cv-link">📄 Resume</a>
+                                <a href="Mingxun_Zhou_CV.pdf" class="cv-link">Resume</a>
+                            </div>
+                            <div class="contact-item">
+                                <a href="https://scholar.google.com/citations?user=N3k-0vsAAAAJ">Google Scholar</a>
                             </div>
                         </div>
                     </div>
@@ -61,9 +61,13 @@
 
             <section class="announcement-section">
                 <div class="announcement-card">
-                    <h3 class="announcement-title">🎓 Hiring!</h3>
+                    <h3 class="announcement-title">Hiring</h3>
                     <p>I am currently looking for <strong>PhD students and research interns</strong> to join my group at HKUST.</p>
                     <p>I am looking for students who are interested in related topics including cryptography, privacy-preserving computation, security and privacy in machine learning, etc. Please feel free to reach out to me via email.</p>
+                </div>
+                <div class="announcement-card">
+                    <h3 class="announcement-title">ICPC Team</h3>
+                    <p>I am currently the coach of HKUST's ICPC team. We are looking for students who are interested in ICPC to join our team. Please send me an email if you are interested.</p>
                 </div>
             </section>
 
@@ -73,7 +77,7 @@
             </section>
 
             <section class="section" id="grants">
-                <h2 class="section-title">Research Grants</h2>
+                <h2 class="section-title">Major Awarded Grants</h2>
                 <p class="section-text">2026. <a href="https://cerg1.ugc.edu.hk/cergprod/scrrm00542.jsp?proj_id=26205726&amp;old_proj_id=null&amp;proj_title=&amp;isname=&amp;ioname=Mingxun&amp;institution=&amp;subject=&amp;pages=1&amp;year=&amp;theSubmit=26205726">Towards Practical Secure Server-Client Computation: A Private Retrieval-Centered Perspective</a>. Early Career Scheme (ECS), Research Grants Council, Hong Kong. Role: Principal Investigator.</p>
             </section>
 
@@ -86,6 +90,15 @@
                 <div id="publications-error" class="publications-error" style="display: none;">
                     <p>Unable to load publications. Please check that <code>publications.xlsx</code> exists in the repository.</p>
                 </div>
+            </section>
+
+            <section class="section" id="students">
+                <h2 class="section-title">Students</h2>
+                <p class="section-text"><strong>Current:</strong></p>
+                <ul class="student-list">
+                    <li>Yijia Fang (PhD student, since 2026)</li>
+                    <li>Yue Zhang (PhD student, since 2026)</li>
+                </ul>
             </section>
 
             <section class="section" id="talks">
@@ -110,7 +123,10 @@
 
             <section class="section" id="services">
                 <h2 class="section-title">Services</h2>
-                <p class="section-text">Reviewer: ToN 2025, TIFS 2025, Usenix Security 2025, Journal of Cryptology 2024, Crypto 2024, Eurocrypt 2024, etc.</p>
+                <ul class="service-list">
+                    <li><strong>Program Committee:</strong> CCS 2026, Eurocrypt 2027</li>
+                    <li><strong>Reviewer:</strong> ToN 2025, TIFS 2025, USENIX Security 2025, Journal of Cryptology 2024, Crypto 2024, Eurocrypt 2024, etc.</li>
+                </ul>
             </section>
 
             <section class="section">
@@ -122,7 +138,7 @@
         </main>
 
         <footer class="footer">
-            <p>&copy; 2025 Mingxun Zhou. All rights reserved. I made this frontend with Cursor.</p>
+            <p>&copy; 2026 Mingxun Zhou.</p>
         </footer>
     </div>
     <script src="script.js?v=2"></script>

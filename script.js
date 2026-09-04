@@ -3,9 +3,6 @@ let publicationsData = [];
 
 // ===== Smooth Scrolling =====
 document.addEventListener('DOMContentLoaded', function() {
-    updateNavbarOffset();
-    initNavbarResizeObserver();
-
     // Smooth scroll for anchor links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
@@ -23,35 +20,9 @@ document.addEventListener('DOMContentLoaded', function() {
     // ===== Load All Content from Excel =====
     loadAllContentFromExcel();
 
-    // ===== Scroll to Top Button =====
-    initScrollToTop();
-
     // ===== Copy Email to Clipboard =====
     initEmailCopy();
 });
-
-// ===== Keep page content clear of fixed navbar =====
-function updateNavbarOffset() {
-    const navbar = document.querySelector('.navbar');
-    if (!navbar) return;
-
-    document.documentElement.style.setProperty('--navbar-offset', `${navbar.offsetHeight}px`);
-}
-
-function initNavbarResizeObserver() {
-    const navbar = document.querySelector('.navbar');
-    if (!navbar) return;
-
-    if (window.ResizeObserver) {
-        const observer = new ResizeObserver(updateNavbarOffset);
-        observer.observe(navbar);
-    } else {
-        window.addEventListener('resize', updateNavbarOffset);
-    }
-
-    window.addEventListener('load', updateNavbarOffset);
-    window.addEventListener('orientationchange', updateNavbarOffset);
-}
 
 // ===== Load All Content from Excel File =====
 function loadAllContentFromExcel() {
@@ -226,44 +197,25 @@ function createPublicationElement(pub) {
     const note = pub.Note || '';
     const codeLink = pub.CodeLink || '';
 
-    // Build HTML structure
-    let html = `
-        <div class="publication-header">
-            ${year ? `<span class="pub-year">${year}</span>` : ''}
-            ${venue ? `<span class="pub-venue">${venue}</span>` : ''}
-        </div>
-        <h3 class="pub-title">
-            <a href="${titleLink}" ${titleLink === '#' ? 'onclick="return false;"' : ''}>${title}</a>
-        </h3>
-        <div class="pub-authors">
-            ${authors}
-            ${note ? ` <span class="pub-note">${note}</span>` : ''}
-            ${codeLink ? ` <span class="pub-links">[<a href="${codeLink}">code</a>]</span>` : ''}
-        </div>
-    `;
-
-    div.innerHTML = html;
-
-    // Highlight author's name - wrap "Mingxun Zhou" in <strong> tags if not already
-    const authorsDiv = div.querySelector('.pub-authors');
-    if (authorsDiv && authors) {
-        let authorsHtml = authorsDiv.innerHTML;
-        // Only wrap if not already wrapped in strong tags (check both plain and HTML)
-        if (!authorsHtml.includes('<strong>Mingxun Zhou</strong>') && authors.includes('Mingxun Zhou')) {
-            // Handle cases with asterisks - replace plain text "Mingxun Zhou" with bold version
-            // Use a regex that matches "Mingxun Zhou" possibly with asterisks, but not already in HTML tags
-            authorsHtml = authors.replace(
-                /(\*?)Mingxun Zhou(\*?)/g,
-                (match, prefix, suffix) => {
-                    return prefix + '<strong>Mingxun Zhou</strong>' + suffix;
-                }
-            );
-            // Rebuild the authors div with the highlighted name, preserving note and links
-            authorsDiv.innerHTML = authorsHtml + 
-                (note ? ` <span class="pub-note">${note}</span>` : '') +
-                (codeLink ? ` <span class="pub-links">[<a href="${codeLink}">code</a>]</span>` : '');
-        }
+    let authorsHtml = authors;
+    if (authors.includes('Mingxun Zhou') && !authors.includes('<strong>Mingxun Zhou</strong>')) {
+        authorsHtml = authors.replace(
+            /(\*?)Mingxun Zhou(\*?)/g,
+            '$1<strong>Mingxun Zhou</strong>$2'
+        );
     }
+
+    const citationParts = [
+        title ? (titleLink === '#' ? title : `<a class="pub-title" href="${titleLink}">${title}</a>`) : '',
+        authorsHtml ? `<span class="pub-authors">${authorsHtml}</span>` : '',
+        venue ? `<span class="pub-venue">${venue}</span>` : '',
+        note ? `<span class="pub-note">${note}</span>` : ''
+    ].filter(Boolean);
+
+    div.innerHTML = `
+        ${year ? `<span class="pub-year">${year}</span>` : ''}
+        <span class="publication-citation">${citationParts.join('. ')}${citationParts.length ? '.' : ''}${codeLink ? ` <span class="pub-links">[<a href="${codeLink}">code</a>]</span>` : ''}</span>
+    `;
 
     return div;
 }
@@ -409,32 +361,6 @@ function showError(message) {
         errorEl.style.display = 'block';
         errorEl.innerHTML = `<p>${message}</p>`;
     }
-}
-
-// ===== Scroll to Top Button =====
-function initScrollToTop() {
-    const scrollButton = document.createElement('button');
-    scrollButton.className = 'scroll-to-top';
-    scrollButton.innerHTML = '↑';
-    scrollButton.setAttribute('aria-label', 'Scroll to top');
-    document.body.appendChild(scrollButton);
-
-    // Show/hide button based on scroll position
-    window.addEventListener('scroll', function() {
-        if (window.pageYOffset > 300) {
-            scrollButton.classList.add('visible');
-        } else {
-            scrollButton.classList.remove('visible');
-        }
-    });
-
-    // Scroll to top on click
-    scrollButton.addEventListener('click', function() {
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth'
-        });
-    });
 }
 
 // ===== Copy Email to Clipboard =====
