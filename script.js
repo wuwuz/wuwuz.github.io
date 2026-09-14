@@ -45,20 +45,11 @@ function loadAllContentFromExcel() {
             // Parse Excel file
             const workbook = XLSX.read(data, { type: 'array' });
             
-            // Load each sheet
-            workbook.SheetNames.forEach(sheetName => {
-                const worksheet = workbook.Sheets[sheetName];
-                const jsonData = XLSX.utils.sheet_to_json(worksheet);
-                
-                // Route to appropriate renderer based on sheet name
-                if (sheetName.toLowerCase() === 'publications' || sheetName === 'Sheet1') {
-                    loadPublicationsSheet(jsonData);
-                } else if (sheetName.toLowerCase() === 'preprints') {
-                    loadPreprintsSheet(jsonData);
-                } else if (sheetName.toLowerCase() === 'talks' || sheetName.toLowerCase() === 'presentations') {
-                    loadTalksSheet(jsonData);
-                }
-            });
+            // Each content type has its own worksheet in publications.xlsx.
+            loadPublicationsSheet(getSheetData(workbook, ['Publications', 'Sheet1']));
+            loadPreprintsSheet(getSheetData(workbook, ['Preprints']));
+            loadThesesSheet(getSheetData(workbook, ['Thesis', 'Theses']));
+            loadTalksSheet(getSheetData(workbook, ['Talks', 'Presentations']));
         })
         .catch(error => {
             console.error('Error loading Excel file:', error);
@@ -85,7 +76,7 @@ function loadAllContentFromExcel() {
             }
             
             // Show error in all sections
-            ['publications', 'preprints', 'talks'].forEach(type => {
+            ['publications', 'preprints', 'theses', 'talks'].forEach(type => {
                 const loadingEl = document.getElementById(`${type}-loading`);
                 const errorEl = document.getElementById(`${type}-error`);
                 if (loadingEl) loadingEl.style.display = 'none';
@@ -95,6 +86,15 @@ function loadAllContentFromExcel() {
                 }
             });
         });
+}
+
+function getSheetData(workbook, acceptedNames) {
+    const accepted = acceptedNames.map(name => name.toLowerCase());
+    const sheetName = workbook.SheetNames.find(name => accepted.includes(name.trim().toLowerCase()));
+
+    if (!sheetName) return null;
+
+    return XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], { defval: '' });
 }
 
 // ===== Load Publications Sheet =====
@@ -132,6 +132,10 @@ function loadPreprintsSheet(jsonData) {
     if (!jsonData || jsonData.length === 0) {
         if (loadingEl) loadingEl.style.display = 'none';
         if (containerEl) containerEl.style.display = 'none';
+        if (errorEl) {
+            errorEl.style.display = 'block';
+            errorEl.innerHTML = '<p>No preprints found in the Excel file.</p>';
+        }
         return;
     }
     
@@ -140,6 +144,29 @@ function loadPreprintsSheet(jsonData) {
     
     // Hide loading, show container
     if (loadingEl) loadingEl.style.display = 'none';
+    if (errorEl) errorEl.style.display = 'none';
+    if (containerEl) containerEl.style.display = 'block';
+}
+
+// ===== Load Thesis Sheet =====
+function loadThesesSheet(jsonData) {
+    const loadingEl = document.getElementById('theses-loading');
+    const containerEl = document.getElementById('theses-container');
+    const errorEl = document.getElementById('theses-error');
+
+    if (!jsonData || jsonData.length === 0) {
+        if (loadingEl) loadingEl.style.display = 'none';
+        if (errorEl) {
+            errorEl.style.display = 'block';
+            errorEl.innerHTML = '<p>No theses found in the Excel file.</p>';
+        }
+        return;
+    }
+
+    renderTheses(jsonData);
+
+    if (loadingEl) loadingEl.style.display = 'none';
+    if (errorEl) errorEl.style.display = 'none';
     if (containerEl) containerEl.style.display = 'block';
 }
 
@@ -177,18 +204,50 @@ function renderPublications(data) {
     // Clear container
     container.innerHTML = '';
 
-    // Render each publication
-    sortedData.forEach(pub => {
-        const pubItem = createPublicationElement(pub);
-        container.appendChild(pubItem);
+    // Render publications in year groups.
+    let publicationNumber = 1;
+
+    groupByYear(sortedData).forEach(([year, publications]) => {
+        const group = createYearGroup(year);
+
+        publications.forEach(pub => {
+            group.appendChild(createPublicationElement(pub, publicationNumber++));
+        });
+
+        container.appendChild(group);
     });
 }
 
+function groupByYear(data) {
+    const groups = new Map();
+
+    data.forEach(item => {
+        const year = item.Year || 'Earlier';
+        if (!groups.has(year)) groups.set(year, []);
+        groups.get(year).push(item);
+    });
+
+    return Array.from(groups.entries());
+}
+
+function createYearGroup(year) {
+    const group = document.createElement('div');
+    group.className = 'publication-year-group';
+
+    const heading = document.createElement('h3');
+    heading.className = 'publication-year-heading';
+    heading.textContent = year;
+    group.appendChild(heading);
+
+    return group;
+}
+
 // ===== Create Publication Element =====
-function createPublicationElement(pub) {
+function createPublicationElement(pub, number, options = {}) {
     const div = document.createElement('div');
     div.className = 'publication-item';
 
+    const { showVenue = true, showYear = false } = options;
     const year = pub.Year || '';
     const venue = pub.Venue || '';
     const title = pub.Title || '';
@@ -208,12 +267,13 @@ function createPublicationElement(pub) {
     const citationParts = [
         title ? (titleLink === '#' ? title : `<a class="pub-title" href="${titleLink}">${title}</a>`) : '',
         authorsHtml ? `<span class="pub-authors">${authorsHtml}</span>` : '',
-        venue ? `<span class="pub-venue">${venue}</span>` : '',
-        note ? `<span class="pub-note">${note}</span>` : ''
+        showVenue && venue ? `<span class="pub-venue">${venue}</span>` : '',
+        note ? `<span class="pub-note">${note}</span>` : '',
+        showYear && year ? `<span class="pub-year">${year}</span>` : ''
     ].filter(Boolean);
 
     div.innerHTML = `
-        ${year ? `<span class="pub-year">${year}</span>` : ''}
+        <span class="publication-number">${number}.</span>
         <span class="publication-citation">${citationParts.join('. ')}${citationParts.length ? '.' : ''}${codeLink ? ` <span class="pub-links">[<a href="${codeLink}">code</a>]</span>` : ''}</span>
     `;
 
@@ -234,48 +294,61 @@ function renderPreprints(data) {
     
     container.innerHTML = '';
     
+    let preprintNumber = 1;
+
     sortedData.forEach(item => {
-        const li = document.createElement('li');
-        const parts = [];
-        
-        // Title with link
-        const title = item.Title || '';
-        const link = item.Link || '';
-        if (title) {
-            if (link && link.trim()) {
-                parts.push(`<a href="${link}">${title}</a>`);
-            } else {
-                parts.push(title);
-            }
-        }
-        
-        // Authors (auto-bold name)
-        if (item.Authors) {
-            let authors = item.Authors;
-            if (authors.includes('Mingxun Zhou') && !authors.includes('<strong>')) {
-                authors = authors.replace(
-                    /(\*?)Mingxun Zhou(\*?)/g,
-                    '$1<strong>Mingxun Zhou</strong>$2'
-                );
-            }
-            parts.push(authors);
-        }
-        
-        // Note/Type
-        if (item.Note) {
-            parts.push(`<strong>${item.Note}</strong>`);
-        } else if (item.Type) {
-            parts.push(`<strong>${item.Type}</strong>`);
-        }
-        
-        // Year
-        if (item.Year) {
-            parts.push(item.Year);
-        }
-        
-        li.innerHTML = parts.join(', ') + '.';
-        container.appendChild(li);
+        container.appendChild(createPublicationElement(item, preprintNumber++, {
+            showVenue: false,
+            showYear: true
+        }));
     });
+}
+
+// ===== Render Thesis Sheet =====
+function renderTheses(data) {
+    const container = document.getElementById('theses-container');
+    if (!container) return;
+
+    const sortedData = [...data].sort((a, b) => (parseInt(b.Year) || 0) - (parseInt(a.Year) || 0));
+    const list = document.createElement('ul');
+    list.className = 'compact-paper-list';
+
+    sortedData.forEach(item => {
+        list.appendChild(createCompactPaperItem(item, true));
+    });
+
+    container.innerHTML = '';
+    container.appendChild(list);
+}
+
+function createCompactPaperItem(item, showYear = false) {
+    const li = document.createElement('li');
+    const parts = [];
+    const title = item.Title || '';
+    const link = item.Link || '';
+
+    if (title) {
+        parts.push(link && link.trim() ? `<a href="${link}">${title}</a>` : title);
+    }
+
+    if (item.Authors) {
+        let authors = item.Authors;
+        if (authors.includes('Mingxun Zhou') && !authors.includes('<strong>')) {
+            authors = authors.replace(/(\*?)Mingxun Zhou(\*?)/g, '$1<strong>Mingxun Zhou</strong>$2');
+        }
+        parts.push(authors);
+    }
+
+    if (item.Note) {
+        parts.push(`<strong>${item.Note}</strong>`);
+    } else if (item.Type) {
+        parts.push(`<strong>${item.Type}</strong>`);
+    }
+
+    if (showYear && item.Year) parts.push(item.Year);
+
+    li.innerHTML = parts.join('. ') + (parts.length ? '.' : '');
+    return li;
 }
 
 // ===== Render Talks =====

@@ -180,6 +180,16 @@ a:focus-visible {
     font-weight: 650;
 }
 
+.publications-subtitle {
+    margin: 24px 0 12px;
+    font-size: 1rem;
+    font-weight: 650;
+}
+
+.section-title + .publications-subtitle {
+    margin-top: 0;
+}
+
 .section-text {
     margin: 0;
 }
@@ -200,13 +210,45 @@ a:focus-visible {
 
 .publication-item {
     display: grid;
-    grid-template-columns: 3.25rem minmax(0, 1fr);
-    gap: 10px;
+    grid-template-columns: 2.25rem minmax(0, 1fr);
+    gap: 8px;
     margin-bottom: 8px;
     line-height: 1.5;
 }
 
 .publication-item:last-child {
+    margin-bottom: 0;
+}
+
+.publication-number {
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+}
+
+.publication-year-heading {
+    margin: 18px 0 8px;
+    color: var(--muted);
+    font-size: 0.92rem;
+    font-weight: 600;
+}
+
+.publication-year-group:first-child .publication-year-heading {
+    margin-top: 0;
+}
+
+.compact-paper-list {
+    margin: 0;
+    padding-left: 1.4rem;
+}
+
+.compact-paper-list li {
+    margin-bottom: 5px;
+    font-size: 0.94rem;
+    line-height: 1.4;
+}
+
+.compact-paper-list li:last-child {
     margin-bottom: 0;
 }
 
@@ -221,7 +263,6 @@ a:focus-visible {
 
 .pub-title {
     font-weight: 600;
-    color: var(--text);
 }
 
 .pub-authors {

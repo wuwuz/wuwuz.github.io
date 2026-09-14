@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mingxun Zhou (周铭洵) - HKUST</title>
-    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" type="text/css" href="style.css?v=2">
     <!-- SheetJS library for reading Excel files -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
@@ -16,7 +16,8 @@
             <div class="nav-links">
                 <a href="#education">Education</a>
                 <a href="#grants">Grants</a>
-                <a href="#publications">Publications / Preprints</a>
+                <a href="#publications">Publications</a>
+                <a href="#theses">Theses</a>
                 <a href="#students">Students</a>
                 <a href="#talks">Talks</a>
                 <a href="#teaching">Teaching</a>
@@ -55,8 +56,8 @@
 
         <main class="main-content">
             <section class="intro-section">
-                <p>Hi, I am an Assistant Professor in the <a href="https://cse.hkust.edu.hk/">Department of Computer Science and Engineering</a> at <a href="https://hkust.edu.hk/">the Hong Kong University of Science and Technology (HKUST)</a>. I obtained my PhD degree from the <a href="http://www.csd.cs.cmu.edu/">Computer Science Department</a> at <a href="http://www.cmu.edu/">Carnegie Mellon University</a>, where I was very grateful to have <a href="https://www.andrew.cmu.edu/user/gfanti/">Giulia Fanti</a> and <a href="http://elaineshi.com/">Elaine Shi</a> as my advisors.</p>
-                <p>My research interests include cryptography, privacy-preserving computation, security and privacy in machine learning, blockchain technology, etc. I design and implement algorithms.</p>
+                <p>Hi, I am an Assistant Professor in the <a href="https://cse.hkust.edu.hk/">Department of Computer Science and Engineering</a> at <a href="https://hkust.edu.hk/">the Hong Kong University of Science and Technology (HKUST)</a>.</p>
+                <p>My research focuses on data security, privacy, and AI governance, covering topics including secure and private data access and processing, AI content provenance, AI service auditing, and more. My research typically involves analyzing threat models, designing algorithms, and implementing systems for concrete security and privacy problems. My research contributions have been adopted in real systems by major industry partners.</p>
             </section>
 
             <section class="announcement-section">
@@ -64,6 +65,7 @@
                     <h3 class="announcement-title">Hiring</h3>
                     <p>I am currently looking for <strong>PhD students and research interns</strong> to join my group at HKUST.</p>
                     <p>I am looking for students who are interested in related topics including cryptography, privacy-preserving computation, security and privacy in machine learning, etc. Please feel free to reach out to me via email.</p>
+                    <p><strong>Prospective students:</strong> Please do not send an AI-generated summary of my papers; it does not help your email get read. To increase your chance, tell me what is special about you and share some unique thought or idea of your own.</p>
                 </div>
                 <div class="announcement-card">
                     <h3 class="announcement-title">ICPC Team</h3>
@@ -73,7 +75,7 @@
 
             <section class="section" id="education">
                 <h2 class="section-title">Education</h2>
-                <p class="section-text">I received my PhD from CMU and my B.S. in Computer Science from <a href="http://english.pku.edu.cn/">Peking University</a>.</p>
+                <p class="section-text">I obtained my PhD degree from the <a href="http://www.csd.cs.cmu.edu/">Computer Science Department</a> at <a href="http://www.cmu.edu/">Carnegie Mellon University</a>, where I was very grateful to have <a href="https://www.andrew.cmu.edu/user/gfanti/">Giulia Fanti</a> and <a href="http://elaineshi.com/">Elaine Shi</a> as my advisors. I received my B.S. in Computer Science from <a href="http://english.pku.edu.cn/">Peking University</a>.</p>
             </section>
 
             <section class="section" id="grants">
@@ -82,13 +84,35 @@
             </section>
 
             <section class="section" id="publications">
-                <h2 class="section-title">Publications / Preprints</h2>
-                <div id="publications-loading" class="publications-loading">Loading publications and preprints...</div>
+                <h2 class="section-title">Publications</h2>
+
+                <h3 class="publications-subtitle">Preprints</h3>
+                <div id="preprints-loading" class="publications-loading">Loading preprints...</div>
+                <div id="preprints-container" class="preprints-list" style="display: none;">
+                    <!-- Preprints will be loaded here from the Preprints sheet -->
+                </div>
+                <div id="preprints-error" class="publications-error" style="display: none;">
+                    <p>Unable to load preprints. Please check that <code>publications.xlsx</code> has a "Preprints" sheet.</p>
+                </div>
+
+                <h3 class="publications-subtitle">Published Papers</h3>
+                <div id="publications-loading" class="publications-loading">Loading publications...</div>
                 <div id="publications-container" class="publications-list" style="display: none;">
-                    <!-- Publications and preprints will be loaded here from Excel file -->
+                    <!-- Publications will be loaded here from the Publications sheet -->
                 </div>
                 <div id="publications-error" class="publications-error" style="display: none;">
                     <p>Unable to load publications. Please check that <code>publications.xlsx</code> exists in the repository.</p>
+                </div>
+            </section>
+
+            <section class="section" id="theses">
+                <h2 class="section-title">Theses</h2>
+                <div id="theses-loading" class="publications-loading">Loading theses...</div>
+                <div id="theses-container" style="display: none;">
+                    <!-- Theses will be loaded here from the Thesis sheet -->
+                </div>
+                <div id="theses-error" class="publications-error" style="display: none;">
+                    <p>Unable to load theses. Please check that <code>publications.xlsx</code> has a "Thesis" sheet.</p>
                 </div>
             </section>
 
@@ -141,6 +165,6 @@
             <p>&copy; 2026 Mingxun Zhou.</p>
         </footer>
     </div>
-    <script src="script.js?v=2"></script>
+    <script src="script.js?v=9"></script>
 </body>
 </html>
