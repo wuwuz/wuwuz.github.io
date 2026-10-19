@@ -47,6 +47,14 @@
             background: #fff1f1;
             color: #b71c1c;
         }
+
+        .syllabus-sections > li {
+            font-weight: 600;
+        }
+
+        .syllabus-sections > li > ol {
+            font-weight: 400;
+        }
     </style>
 </head>
 <body>
@@ -101,28 +109,43 @@
     </ul>
 
     <h2>Course Syllabus</h2>
-    <ol>
-        <li>Introduction (<a href="Materials/L00-Intro.pptx">slides</a>)</li>
-        <li>Propositional Logic (<a href="Materials/L01-Propositional-Logic-Beamer.pdf">slides</a>, <a href="Materials/L01-Propositional-Logic-Course-Note.pdf">notes</a>)</li>
-        <li>Predicate Logic (<a href="Materials/L02-Predicate-Logic-Beamer.pdf">slides</a>, <a href="Materials/L02-Predicate-Logic-Course-Note.pdf">notes</a>)</li>
-        <li>Inference and Proofs (<a href="Materials/L03-Inference-and-Proofs-Beamer.pdf">slides</a>, <a href="Materials/L03-Inference-and-Proofs-Course-Note.pdf">notes</a>)</li>
-        <li>A Non-Expert's Gentle Introduction to Formal Mathematics and AI4Math (Optional; <a href="Materials/L03x-Formal-Mathematics-and-AI-Beamer.pdf">slides</a>)</li>
+    <ol class="syllabus-sections">
+        <li>Introduction (<a href="Materials/L00-Introduction.pptx">slides</a>)</li>
+        <li>Logic
+            <ol type="a">
+                <li>Propositional Logic (<a href="Materials/L01-Propositional-Logic-Beamer.pdf">slides</a>, <a href="Materials/L01-Propositional-Logic-Course-Note.pdf">notes</a>)</li>
+                <li>Predicate Logic (<a href="Materials/L02-Predicate-Logic-Beamer.pdf">slides</a>, <a href="Materials/L02-Predicate-Logic-Course-Note.pdf">notes</a>)</li>
+                <li>Inference and Proofs (<a href="Materials/L03-Inference-and-Proofs-Beamer.pdf">slides</a>, <a href="Materials/L03-Inference-and-Proofs-Course-Note.pdf">notes</a>)</li>
+                <li>Optional: A Non-Expert's Gentle Introduction to Formal Mathematics and AI4Math (<a href="Materials/L03x-A-Non-Experts-Gentle-Introduction-to-Formal-Mathematics-and-AI4Math-Beamer.pdf">slides</a>)</li>
+            </ol>
+        </li>
         <li>Sets and Functions (<a href="Materials/L04-Sets-and-Functions-Beamer.pdf">slides</a>, <a href="Materials/L04-Sets-and-Functions-Course-Note.pdf">notes</a>)</li>
-        <li>Counting (<a href="Materials/L11-Basic-Counting-Beamer.pdf">slides</a>, <a href="Materials/L11-Basic-Counting-Course-Note.pdf">notes</a>)</li>
-        <li>Permutations and Combinations (<a href="Materials/L12-Permutations-and-Combinations-Beamer.pdf">slides</a>, <a href="Materials/L12-Permutations-and-Combinations-Course-Note.pdf">notes</a>)</li>
-        <li>Binomial Theorem (<a href="Materials/L13-Binomial-Coefficients-Beamer.pdf">slides</a>, <a href="Materials/L13-Binomial-Coefficients-Course-Note.pdf">notes</a>)</li>
-        <li>Inclusion-Exclusion (<a href="Materials/L14-Inclusion-Exclusion-Beamer.pdf">slides</a>, <a href="Materials/L14-Inclusion-Exclusion-Course-Note.pdf">notes</a>)</li>
-        <li>Probability (<a href="Materials/L15-Introduction-to-Probability-Beamer.pdf">slides</a>, <a href="Materials/L15-Introduction-to-Probability-Course-Note.pdf">notes</a>)</li>
-        <li>Conditional Probability (<a href="Materials/L16-Conditional-Probability-Beamer.pdf">slides</a>, <a href="Materials/L16-Conditional-Probability-Course-Note.pdf">notes</a>)</li>
-        <li value="12" style="list-style-type: '12x. ';">Bayes' Theorem (<a href="Materials/L16x-Bayes-Beamer.pdf">slides</a>, <a href="Materials/L16x-Bayes-Course-Note.pdf">notes</a>)</li>
-        <li>Random Variables (<a href="Materials/L17-Random-Variables-Beamer.pdf">slides</a>, <a href="Materials/L17-Random-Variables-Course-Note.pdf">notes</a>)</li>
-        <li value="13" style="list-style-type: '13x. ';">Variances and Concentration</li>
-        <li>Modular Arithmetic</li>
-        <li>GCD</li>
-        <li>Cryptography</li>
+        <li>Counting
+            <ol type="a">
+                <li>Basic Counting (<a href="Materials/L11-Basic-Counting-Beamer.pdf">slides</a>, <a href="Materials/L11-Basic-Counting-Course-Note.pdf">notes</a>)</li>
+                <li>Permutations and Combinations (<a href="Materials/L12-Permutations-and-Combinations-Beamer.pdf">slides</a>, <a href="Materials/L12-Permutations-and-Combinations-Course-Note.pdf">notes</a>)</li>
+                <li>Binomial Theorem (<a href="Materials/L13-Binomial-Theorem-Beamer.pdf">slides</a>, <a href="Materials/L13-Binomial-Theorem-Course-Note.pdf">notes</a>)</li>
+                <li>Inclusion-Exclusion (<a href="Materials/L14-Inclusion-Exclusion-Beamer.pdf">slides</a>, <a href="Materials/L14-Inclusion-Exclusion-Course-Note.pdf">notes</a>)</li>
+            </ol>
+        </li>
+        <li>Probability
+            <ol type="a">
+                <li>Introduction to Probability (<a href="Materials/L15-Introduction-to-Probability-Beamer.pdf">slides</a>, <a href="Materials/L15-Introduction-to-Probability-Course-Note.pdf">notes</a>)</li>
+                <li>Conditional Probability (<a href="Materials/L16-Conditional-Probability-Beamer.pdf">slides</a>, <a href="Materials/L16-Conditional-Probability-Course-Note.pdf">notes</a>)</li>
+                <li>Bayes' Theorem (<a href="Materials/L16x-Bayes-Theorem-Beamer.pdf">slides</a>, <a href="Materials/L16x-Bayes-Theorem-Course-Note.pdf">notes</a>)</li>
+                <li>Random Variables (<a href="Materials/L17-Random-Variables-Beamer.pdf">slides</a>, <a href="Materials/L17-Random-Variables-Course-Note.pdf">notes</a>)</li>
+                <li>Variances and Concentration (<a href="Materials/L17x-Variances-and-Concentration-Beamer.pdf">slides</a>, <a href="Materials/L17x-Variances-and-Concentration-Course-Note.pdf">notes</a>)</li>
+            </ol>
+        </li>
+        <li>Number Theory
+            <ol type="a">
+                <li>Basic Modular Arithmetic</li>
+                <li>Modular Inversion, Chinese Remainder Theorem (CRT), and Exponentiation</li>
+                <li>Cryptography</li>
+            </ol>
+        </li>
         <li>Algorithms</li>
-        <li>Induction</li>
-        <li>Recursion</li>
+        <li>Induction and Recursion</li>
         <li>Graphs</li>
     </ol>
 
@@ -140,6 +163,8 @@
         <li>Sep 29: <a href="https://rvcmedia.ust.hk/media/?path=26FA_COMP2711-L3_260929_cleFvI7GLs">Binomial Theorem</a></li>
         <li>Oct 6: <a href="https://rvcmedia.ust.hk/media/?path=26FA_COMP2711-L3_261006_gyAkkgC2VA">Inclusion-Exclusion</a></li>
         <li>Oct 8: <a href="https://rvcmedia.ust.hk/media/?path=26FA_COMP2711-L3_261008_5Ji022nzCa">Basic Probability</a></li>
+        <li>Oct 13: <a href="https://rvcmedia.ust.hk/media/?path=26FA_COMP2711-L3_261013_ImVYGyF9TK">Conditional Probability</a></li>
+        <li>Oct 15: <a href="https://rvcmedia.ust.hk/media/?path=26FA_COMP2711-L3_261015_dAY99PO9V0">Bayes' Theorem; Random Variables (Distributions and Expectations)</a></li>
     </ul>
 
     <h2>Homework</h2>
@@ -156,7 +181,7 @@
 
     <h2>Materials</h2>
     <ul>
-        <li><a href="Materials/pass-discrete-math.pdf">A Course on Discrete Math by Pass and Tseng</a></li>
+        <li><a href="Materials/A-Course-on-Discrete-Math-by-Pass-and-Tseng.pdf">A Course on Discrete Math by Pass and Tseng</a></li>
         <li><a href="https://liutianren.com/discrete/lecture_notes.pdf">Lecture Notes of PKU's Discrete Math</a> (It covers more contents and is more involved. Credit: Prof. Tianren Liu)</li>
         <li><a href="https://liutianren.com/discrete/ref/%e7%a6%bb%e6%95%a3%e6%95%b0%e5%ad%a6%e4%b8%8e%e7%bb%93%e6%9e%84.pdf">离散数学与结构 by 邓小铁 王畅</a></li>
     </ul>
