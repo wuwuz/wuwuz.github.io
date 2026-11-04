@@ -166,13 +166,13 @@ function renderGuided(){$('guided-section').classList.toggle('quick-mode',state.
 function bucketQuickHTML(s){
  $('moves-label').textContent='bucket placements';
  const row=(items,highlight=false)=>items.map((c,i)=>{
-  if(!highlight)return card(c,'','bucket-');
-  const isPivot=s.pivot!==null&&i===0;
-  const label=isPivot?'pivot':c.id===s.scan?'i = '+(i+1):'';
+  if(!highlight)return card(c,s.fixed.some(pos=>s.array[pos-1].id===c.id)?'done':'','bucket-');
+  const isPivot=c.id===s.pivotId;
+  const label=[isPivot?'pivot':'',c.id===s.scan?'i = '+(i+1):''].filter(Boolean).join(' / ');
   return `<div class="scan-card"><span class="scan-label ${isPivot?'pivot-label':''}" ${label?`aria-label="${label} points to value ${c.value}"`:''}>${label?label+' ↓':''}</span>${card(c,isPivot?'active':c.id===s.scan?'compare':'','source-')}</div>`;
  }).join('')||'<span>Empty</span>';
 
- const groups=[['smaller_or_equal',s.buckets[0]],['larger',s.buckets[2]]].map(([name,items])=>`<div class="bucket-group"><h3>${name}</h3><div class="card-row">${row(items)}</div></div>`).join('');
+ const groups=[['< pivot',s.buckets[0]],['= pivot',s.buckets[1]],['> pivot',s.buckets[2]]].map(([name,items])=>`<div class="bucket-group"><h3>${name.replace('<','&lt;').replace('>','&gt;')}</h3><div class="card-row">${row(items)}</div></div>`).join('');
 const main=s.array.map((c,i)=>`<div class="quick-main-slot ${!s.complete&&i+1>=s.low&&i+1<=s.high?'in-call':''}">${card(c,s.fixed.includes(i+1)?'done':'','result-')}<small>A[${i+1}]</small></div>`).join('');
  const showPartition=!s.complete&&!['recurse','return'].includes(s.phase);
  return `<div class="quick-focus-layout"><section class="quick-focus-arrays"><div class="quick-array-scroll"><h3>Main array</h3><div class="quick-aligned-row" style="--slots:${Math.max(1,s.array.length)}">${main}</div><div class="quick-partition-placeholder" style="visibility:${showPartition?'visible':'hidden'}" aria-hidden="${!showPartition}"><h3>Active subarray · depth ${Math.max(0,s.stack.length-1)}</h3><div class="quick-aligned-row quick-active-row" style="--slots:${Math.max(1,s.array.length)}">${Array.from({length:Math.max(0,s.low-1)},()=>'<div aria-hidden="true"></div>').join('')}${s.input.length?row(s.input,true):'<span class="quick-empty-call">Empty interval</span>'}</div></div></div><div class="bucket-groups" style="visibility:${showPartition?'visible':'hidden'}" aria-hidden="${!showPartition}">${groups}</div></section><aside class="quick-call-outline"><h3>Recursive calls</h3>${quickRecursionTree(s)}</aside></div>`;
@@ -218,6 +218,6 @@ $('fullscreen').onclick=async()=>{try{if(document.fullscreenElement)await docume
 document.addEventListener('keydown',event=>{if(state.mode==='free'||state.mode==='guess'||/INPUT|SELECT|TEXTAREA|BUTTON/.test(event.target.tagName)||event.metaKey||event.ctrlKey||event.altKey)return;if(event.key===' '){event.preventDefault();play();}else if(event.key==='ArrowRight'){event.preventDefault();go(state.step+1);}else if(event.key==='ArrowLeft'){event.preventDefault();go(state.step-1);}});
 let resizeTimer;window.addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(()=>{if(state.mode==='free')renderFree();},150);});
 E.quickSort=E.bucketQuickSort;
-code.quick=[['QuickSort(A)'],['  if length(A) ≤ 1: return A'],['  pivot ← first value of A; set it aside'],['  smaller_or_equal, larger ← empty lists'],['  for each remaining value in A'],['    copy to smaller_or_equal if ≤ pivot; else larger'],['  combine smaller_or_equal + pivot + larger\n  // Pivot is now in its final sorted position.\n  // Left values ≤ pivot; right values > pivot.\n  // We now need to sort both sides separately.'],['  left ← QuickSort(smaller_or_equal)'],['  right ← QuickSort(larger)'],['  return left + [pivot] + right']];
-titles.quick=['','Quicksort','Expected O(n log n) on random input'];
+code.quick=[['QuickSort(A)'],['  if length(A) ≤ 1: return A'],['  choose pivot from A'],['  smaller, equal, larger ← empty lists'],['  for each value in A'],['    copy to smaller (<), equal (=), or larger (>)'],['  combine smaller + equal + larger\n  // All equal values are now in final sorted positions.\n  // Sort only the smaller and larger groups.'],['  left ← QuickSort(smaller)'],['  right ← QuickSort(larger)'],['  return left + equal + right']];
+titles.quick=['','Quicksort','Median pivot (demo) · partition comparisons shown'];
 changeMode('free');

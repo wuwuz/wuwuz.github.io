@@ -165,33 +165,35 @@ function bucketQuickSort(input){
   if(!node){node={key,parent,side,low:start+1,high:start+items.length,values:items.map(c=>c.value),depth:stack.length,done:false};nodes.push(node);}
   node.pending=false;
   stack.push({low:start+1,high:start+items.length});
-  const smaller=[],equal=[],larger=[];let pivot=null,scan=null;
-  const push=(message,line,phase)=>states.push({kind:'quick',nodes:JSON.parse(JSON.stringify(nodes)),activeNode:key,array:clone(a),stack:clone(stack),fixed:[...fixed],comparisons,moves,message,line,phase,pivot,scan,low:start+1,high:start+items.length,buckets:[clone(smaller),clone(equal),clone(larger)],input:clone(items)});
+  const smaller=[],equal=[],larger=[];let pivot=null,pivotId=null,scan=null;
+  const push=(message,line,phase)=>states.push({kind:'quick',nodes:JSON.parse(JSON.stringify(nodes)),activeNode:key,array:clone(a),stack:clone(stack),fixed:[...fixed],comparisons,moves,message,line,phase,pivot,pivotId,scan,low:start+1,high:start+items.length,buckets:[clone(smaller),clone(equal),clone(larger)],input:clone(items)});
   push('Sort this subarray.',0,'call');
   if(items.length<=1){if(items.length)fixed.add(start+1);node.done=true;push('At most one value: already sorted.',1,'base');stack.pop();return items;}
-  pivot=items[0].value;
-  equal.push({...items[0]});
-  push('Choose the first value as pivot: '+pivot+'.',2,'choose');
-  for(const c of items.slice(1)){
+  // Choose a balanced pivot for the demo without rearranging the input.
+  const chosen=[...items].sort((a,b)=>a.value-b.value)[Math.floor(items.length/2)];
+  pivot=chosen.value;pivotId=chosen.id;
+  push('Choose pivot '+pivot+'.',2,'choose');
+  for(const c of items){
    scan=c.id;push('Compare '+c.value+' with pivot '+pivot+'.',4,'compare');
    comparisons++;let bucket;
-   bucket=c.value<=pivot?smaller:larger;
+   if(c.value<pivot)bucket=smaller;
+   else {comparisons++;bucket=c.value===pivot?equal:larger;}
    bucket.push({...c});moves++;
-   push('Copy '+c.value+' into '+(bucket===smaller?'smaller_or_equal':'larger')+'.',5,'bucket');
+   push('Copy '+c.value+' into '+(bucket===smaller?'smaller':bucket===equal?'equal':'larger')+'.',5,'bucket');
   }
   scan=null;
   a.splice(start,items.length,...smaller,...equal,...larger);
   for(let i=0;i<equal.length;i++)fixed.add(start+smaller.length+i+1);
-  push('There are '+smaller.length+' other numbers smaller than or equal to pivot '+pivot+'. So pivot '+pivot+' should be placed at A['+(start+smaller.length+1)+']. This is its final position.',6,'combined');
+  push('There are '+smaller.length+' values smaller than pivot '+pivot+' and '+equal.length+' equal to it. The equal block occupies A['+(start+smaller.length+1)+', '+(start+smaller.length+equal.length)+']. All these values are now in their final sorted positions. Sort only the smaller and larger groups.',6,'combined');
   nodes.push({key:key+'L',parent:key,side:'Left',low:start+1,high:start+smaller.length,values:smaller.map(c=>c.value),depth:stack.length,done:false,pending:true});
   nodes.push({key:key+'R',parent:key,side:'Right',low:start+smaller.length+equal.length+1,high:start+items.length,values:larger.map(c=>c.value),depth:stack.length,done:false,pending:true});
-  push('Recursively sort the smaller_or_equal group; the larger group is pending.',7,'recurse');
+  push('Recursively sort the smaller group; the larger group is pending.',7,'recurse');
   const left=run(smaller,start,key+'L',key,'Left');
   push('Recursively sort the larger group.',8,'recurse');
   const right=run(larger,start+smaller.length+equal.length,key+'R',key,'Right');
   a.splice(start,items.length,...left,...equal,...right);
   node.values=[...left,...equal,...right].map(c=>c.value);
-  node.done=true;push('Return sorted smaller_or_equal + pivot + sorted larger.',9,'return');
+  node.done=true;push('Return sorted smaller + equal + sorted larger.',9,'return');
   stack.pop();return [...left,...equal,...right];
  }
  run(clone(input),0);

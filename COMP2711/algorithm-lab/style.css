@@ -125,3 +125,8 @@ label,.preset-label{font-size:15px;color:#4e6055}input:not([type=range]){font-si
 .quick-mode .bucket-group:last-child{background:#eaf2fc;border-color:#89a8cf}
 .quick-mode .bucket-group:first-child h3{color:#355522}
 .quick-mode .bucket-group:last-child h3{color:#264f7c}
+.quick-mode .bucket-groups{grid-template-columns:repeat(3,minmax(0,1fr))}
+.quick-mode .bucket-group:nth-child(2){background:#fff5dc;border-color:#c5a351}
+.quick-mode .bucket-group:nth-child(2) h3{color:#6b5014}
+.quick-mode .scan-label{height:40px;white-space:normal}
+@media(max-width:700px){.quick-mode .bucket-groups{grid-template-columns:minmax(0,1fr)}}
