@@ -114,6 +114,15 @@ function arrayHTML(s){
  return html;
 }
 function quickHTML(s){
+ if(s.buckets)return bucketQuickHTML(s);
+ const depth=s.stack.length-1;
+ const depthRows=s.stack.map((r,i)=>{
+  const empty=r.low>r.high;
+  const left=100*(r.low-1)/Math.max(1,s.array.length);
+  const width=100*Math.max(0,r.high-r.low+1)/Math.max(1,s.array.length);
+  return `<div class="quick-depth-row ${i===depth?'current':''}"><span>Depth ${i}</span><div class="quick-depth-track"><span class="quick-depth-bar" style="left:${left}%;width:${width}%"></span></div><span>${empty?'Empty':`A[${r.low}…${r.high}]`}</span></div>`;
+ }).join('');
+ const depthView=`<section class="quick-depth" aria-label="Quicksort recursion depth"><h3>Recursion depth: ${depth<0?(s.complete?'Complete':'Not started'):depth}</h3>${depthRows}</section>`;
  const breadcrumb=s.stack.filter(r=>r.low<=r.high).map(r=>`A[${r.low}…${r.high}]`).join(' → ');
  let html=`<div class="quick-summary"><span>${breadcrumb||'Quicksort'}</span><span>Pivot <strong>${s.pivot??'—'}</strong></span></div><div class="card-row pointer-row quick-array">`;
  html+=s.array.map((c,i)=>{
@@ -129,15 +138,55 @@ function quickHTML(s){
   if(s.compare.includes(pos))style='compare';
   return `<div class="card-wrap guided-slot ${pos>=s.low&&pos<=s.high?'quick-range':''}">${labels.length?pointer(labels.join('\n'),'quick-pointer-'+labels.join('-'),`A[${pos}]`):''}${card(c,style,'quick-card-')}<span class="index">A[${pos}]</span><span class="quick-region">${region}</span></div>`;
  }).join('');
- return html+'</div>';
+ return html+'</div>'+depthView;
 }
-function renderGuided(){$('guided-section').classList.toggle('quick-mode',state.mode==='quick');$('legend-active').textContent=isSearch()?'Current':'Selected';$('legend-done').textContent=isSearch()?'Found':state.mode==='insertion'?'Sorted prefix':'Finished';$('guided-section').classList.toggle('merge-sort-mode',state.mode==='mergesort');$('guided-section').classList.toggle('search-mode',isSearch());const s=state.trace[state.step];if(!s)return;const [kicker,title,cost]=titles[state.mode];$('cost').textContent=cost;$('explanation').textContent=s.message;$('comparisons').textContent=s.comparisons;$('moves').textContent=isSearch()?s.reads:s.moves;$('moves-label').textContent=isSearch()?'array reads':state.mode==='insertion'?'array writes':['selection','bubble','quick'].includes(state.mode)?'swaps':'values copied';$('progress-text').textContent=`${state.step+1} / ${state.trace.length}`;$('timeline').max=state.trace.length-1;$('timeline').value=state.step;$('back').disabled=state.step===0;$('next').disabled=state.step===state.trace.length-1;
+function renderGuided(){$('guided-section').classList.toggle('quick-mode',state.mode==='quick');$('legend-active').textContent=isSearch()?'Current':'Selected';$('legend-done').textContent=isSearch()?'Found':state.mode==='insertion'?'Sorted prefix':'Finished';$('guided-section').classList.toggle('merge-sort-mode',['mergesort','quick'].includes(state.mode));$('guided-section').classList.toggle('search-mode',isSearch());const s=state.trace[state.step];if(!s)return;const [kicker,title,cost]=titles[state.mode];$('cost').textContent=cost;$('explanation').textContent=s.message;$('comparisons').textContent=s.comparisons;$('moves').textContent=isSearch()?s.reads:s.moves;$('moves-label').textContent=isSearch()?'array reads':state.mode==='insertion'?'array writes':['selection','bubble','quick'].includes(state.mode)?'swaps':'values copied';$('progress-text').textContent=`${state.step+1} / ${state.trace.length}`;$('timeline').max=state.trace.length-1;$('timeline').value=state.step;$('back').disabled=state.step===0;$('next').disabled=state.step===state.trace.length-1;
+ const explanationPanel=$('explanation').parentElement;
+ if(state.mode==='quick')$('stage').before(explanationPanel);
+ else $('stage').after(explanationPanel);
  const old=new Map([...$('stage').querySelectorAll('[data-key]')].map(el=>[el.dataset.key,el.getBoundingClientRect()]));
  if(state.mode==='quick')$('stage').innerHTML=quickHTML(s);else if(['selection','insertion','bubble','linear','binary'].includes(state.mode))$('stage').innerHTML=arrayHTML(s);else if(state.mode==='merge')$('stage').innerHTML=mergeHTML(s);else $('stage').innerHTML=treeHTML(s);
  if(!matchMedia('(prefers-reduced-motion: reduce)').matches)$('stage').querySelectorAll('[data-key]').forEach(el=>{const before=old.get(el.dataset.key),after=el.getBoundingClientRect();if(before&&Math.abs(before.x-after.x)+Math.abs(before.y-after.y)>1)el.animate([{transform:`translate(${before.x-after.x}px,${before.y-after.y}px)`},{transform:'translate(0,0)'}],{duration:300,easing:'ease-out'});});
- $('code').replaceChildren(...code[state.mode].map(([text,comment],i)=>{const li=document.createElement('li');li.textContent=text;li.className=(comment?'comment ':'')+((Array.isArray(s.line)?s.line.includes(i):i===s.line)?'current':'');return li;}));
+ $('code').replaceChildren(...code[state.mode].map(([text,comment],i)=>{
+  const li=document.createElement('li'),content=document.createElement('span');
+  content.className='code-content';
+  text.split('\n').forEach((line,j)=>{
+   if(j)content.append(document.createElement('br'));
+   const part=document.createElement('span');
+   part.textContent=line;
+   if(line.trimStart().startsWith('//'))part.className='code-explanation';
+   content.append(part);
+  });
+  li.append(content);
+  li.className=(comment?'comment ':'')+((Array.isArray(s.line)?s.line.includes(i):i===s.line)?'current':'');
+  return li;
+ }));
  $('play').textContent=state.timer?'Ⅱ Pause':s.complete?'↶ Replay':'▶ Play';
 }
+function bucketQuickHTML(s){
+ $('moves-label').textContent='bucket placements';
+ const row=(items,highlight=false)=>items.map((c,i)=>{
+  if(!highlight)return card(c,'','bucket-');
+  const isPivot=s.pivot!==null&&i===0;
+  const label=isPivot?'pivot':c.id===s.scan?'i = '+(i+1):'';
+  return `<div class="scan-card"><span class="scan-label ${isPivot?'pivot-label':''}" ${label?`aria-label="${label} points to value ${c.value}"`:''}>${label?label+' ↓':''}</span>${card(c,isPivot?'active':c.id===s.scan?'compare':'','source-')}</div>`;
+ }).join('')||'<span>Empty</span>';
+
+ const groups=[['smaller_or_equal',s.buckets[0]],['larger',s.buckets[2]]].map(([name,items])=>`<div class="bucket-group"><h3>${name}</h3><div class="card-row">${row(items)}</div></div>`).join('');
+const main=s.array.map((c,i)=>`<div class="quick-main-slot ${!s.complete&&i+1>=s.low&&i+1<=s.high?'in-call':''}">${card(c,s.fixed.includes(i+1)?'done':'','result-')}<small>A[${i+1}]</small></div>`).join('');
+ const showPartition=!s.complete&&!['recurse','return'].includes(s.phase);
+ return `<div class="quick-focus-layout"><section class="quick-focus-arrays"><div class="quick-array-scroll"><h3>Main array</h3><div class="quick-aligned-row" style="--slots:${Math.max(1,s.array.length)}">${main}</div><div class="quick-partition-placeholder" style="visibility:${showPartition?'visible':'hidden'}" aria-hidden="${!showPartition}"><h3>Active subarray · depth ${Math.max(0,s.stack.length-1)}</h3><div class="quick-aligned-row quick-active-row" style="--slots:${Math.max(1,s.array.length)}">${Array.from({length:Math.max(0,s.low-1)},()=>'<div aria-hidden="true"></div>').join('')}${s.input.length?row(s.input,true):'<span class="quick-empty-call">Empty interval</span>'}</div></div></div><div class="bucket-groups" style="visibility:${showPartition?'visible':'hidden'}" aria-hidden="${!showPartition}">${groups}</div></section><aside class="quick-call-outline"><h3>Recursive calls</h3>${quickRecursionTree(s)}</aside></div>`;
+}
+function quickRecursionTree(s){
+ const nodes=s.nodes||[];
+ const render=n=>{
+  const children=nodes.filter(c=>c.parent===n.key);
+  const active=!s.complete&&n.key===s.activeNode;
+  return `<li><span class="quick-call-label ${active?'current':''}" ${active?'aria-current="step"':''}>${n.side?n.side+' → ':'Root · '}A[${n.low}, ${n.high}]${n.low>n.high?' (empty)':''} <small>${active?'current':n.done?'sorted':n.pending?'pending':''}</small></span>${children.length?'<ul>'+children.map(render).join('')+'</ul>':''}</li>`;
+ };
+ return '<ul class="quick-calls">'+nodes.filter(n=>!n.parent).map(render).join('')+'</ul>';
+}
+
 function go(step){pause();state.step=Math.max(0,Math.min(step,state.trace.length-1));renderGuided();}
 function play(){if(state.timer){pause();return;}if(state.step===state.trace.length-1)state.step=0;const tick=()=>{if(state.step>=state.trace.length-1){pause();renderGuided();return;}state.step++;state.timer=setTimeout(tick,Number($('speed').value));renderGuided();};state.timer=setTimeout(tick,Number($('speed').value));renderGuided();}
 $('input-form').addEventListener('submit',event=>{event.preventDefault();try{
@@ -168,4 +217,7 @@ $('restart').onclick=()=>go(0);$('back').onclick=()=>go(state.step-1);$('next').
 $('fullscreen').onclick=async()=>{try{if(document.fullscreenElement)await document.exitFullscreen();else await document.documentElement.requestFullscreen();}catch{$('fullscreen').textContent='Use your browser’s full-screen view';}};document.addEventListener('fullscreenchange',()=>{$('fullscreen').textContent='⛶';});
 document.addEventListener('keydown',event=>{if(state.mode==='free'||state.mode==='guess'||/INPUT|SELECT|TEXTAREA|BUTTON/.test(event.target.tagName)||event.metaKey||event.ctrlKey||event.altKey)return;if(event.key===' '){event.preventDefault();play();}else if(event.key==='ArrowRight'){event.preventDefault();go(state.step+1);}else if(event.key==='ArrowLeft'){event.preventDefault();go(state.step-1);}});
 let resizeTimer;window.addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(()=>{if(state.mode==='free')renderFree();},150);});
+E.quickSort=E.bucketQuickSort;
+code.quick=[['QuickSort(A)'],['  if length(A) ≤ 1: return A'],['  pivot ← first value of A; set it aside'],['  smaller_or_equal, larger ← empty lists'],['  for each remaining value in A'],['    copy to smaller_or_equal if ≤ pivot; else larger'],['  combine smaller_or_equal + pivot + larger\n  // Pivot is now in its final sorted position.\n  // Left values ≤ pivot; right values > pivot.\n  // We now need to sort both sides separately.'],['  left ← QuickSort(smaller_or_equal)'],['  right ← QuickSort(larger)'],['  return left + [pivot] + right']];
+titles.quick=['','Quicksort','Expected O(n log n) on random input'];
 changeMode('free');

@@ -158,6 +158,46 @@ function quickSort(input){
  push(`Sorted. ${comparisons} value comparisons and ${moves} swaps.`,11,{complete:true});return states;
 }
 
+function bucketQuickSort(input){
+ const a=clone(input),states=[],stack=[],nodes=[],fixed=new Set();let comparisons=0,moves=0;
+ function run(items,start,key='root',parent=null,side=''){
+  let node=nodes.find(n=>n.key===key);
+  if(!node){node={key,parent,side,low:start+1,high:start+items.length,values:items.map(c=>c.value),depth:stack.length,done:false};nodes.push(node);}
+  node.pending=false;
+  stack.push({low:start+1,high:start+items.length});
+  const smaller=[],equal=[],larger=[];let pivot=null,scan=null;
+  const push=(message,line,phase)=>states.push({kind:'quick',nodes:JSON.parse(JSON.stringify(nodes)),activeNode:key,array:clone(a),stack:clone(stack),fixed:[...fixed],comparisons,moves,message,line,phase,pivot,scan,low:start+1,high:start+items.length,buckets:[clone(smaller),clone(equal),clone(larger)],input:clone(items)});
+  push('Sort this subarray.',0,'call');
+  if(items.length<=1){if(items.length)fixed.add(start+1);node.done=true;push('At most one value: already sorted.',1,'base');stack.pop();return items;}
+  pivot=items[0].value;
+  equal.push({...items[0]});
+  push('Choose the first value as pivot: '+pivot+'.',2,'choose');
+  for(const c of items.slice(1)){
+   scan=c.id;push('Compare '+c.value+' with pivot '+pivot+'.',4,'compare');
+   comparisons++;let bucket;
+   bucket=c.value<=pivot?smaller:larger;
+   bucket.push({...c});moves++;
+   push('Copy '+c.value+' into '+(bucket===smaller?'smaller_or_equal':'larger')+'.',5,'bucket');
+  }
+  scan=null;
+  a.splice(start,items.length,...smaller,...equal,...larger);
+  for(let i=0;i<equal.length;i++)fixed.add(start+smaller.length+i+1);
+  push('There are '+smaller.length+' other numbers smaller than or equal to pivot '+pivot+'. So pivot '+pivot+' should be placed at A['+(start+smaller.length+1)+']. This is its final position.',6,'combined');
+  nodes.push({key:key+'L',parent:key,side:'Left',low:start+1,high:start+smaller.length,values:smaller.map(c=>c.value),depth:stack.length,done:false,pending:true});
+  nodes.push({key:key+'R',parent:key,side:'Right',low:start+smaller.length+equal.length+1,high:start+items.length,values:larger.map(c=>c.value),depth:stack.length,done:false,pending:true});
+  push('Recursively sort the smaller_or_equal group; the larger group is pending.',7,'recurse');
+  const left=run(smaller,start,key+'L',key,'Left');
+  push('Recursively sort the larger group.',8,'recurse');
+  const right=run(larger,start+smaller.length+equal.length,key+'R',key,'Right');
+  a.splice(start,items.length,...left,...equal,...right);
+  node.values=[...left,...equal,...right].map(c=>c.value);
+  node.done=true;push('Return sorted smaller_or_equal + pivot + sorted larger.',9,'return');
+  stack.pop();return [...left,...equal,...right];
+ }
+ run(clone(input),0);
+ states.push({...states[states.length-1],array:clone(a),stack:[],fixed:[...fixed],complete:true,message:'Sorted.',line:9});
+ return states;
+}
 function guessReply(secret,guess){return guess<secret?'too small':guess>secret?'too big':'correct';}
 function guessing(n,secret,strategy){
  if(!Number.isInteger(n)||n<1||!Number.isInteger(secret)||secret<1||secret>n)throw Error('Choose n ≥ 1 and a secret from 1 to n.');
@@ -177,5 +217,5 @@ function guessing(n,secret,strategy){
  }
  return states;
 }
-const api={cards,sorted,quickSort,selection,insertion,bubble,merging,mergeSort,linearSearch,binarySearch,guessReply,guessing};root.SortingEngine=api;if(typeof module!=='undefined')module.exports=api;
+const api={cards,sorted,quickSort,bucketQuickSort,selection,insertion,bubble,merging,mergeSort,linearSearch,binarySearch,guessReply,guessing};root.SortingEngine=api;if(typeof module!=='undefined')module.exports=api;
 })(typeof globalThis!=='undefined'?globalThis:window);

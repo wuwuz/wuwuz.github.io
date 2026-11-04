@@ -63,3 +63,65 @@ label,.preset-label{font-size:15px;color:#4e6055}input:not([type=range]){font-si
 
 /* In-place quicksort keeps memory addresses fixed while cards swap. */
 .quick-summary{display:flex;justify-content:space-between;align-items:center;gap:18px;font-size:18px;margin-bottom:20px;flex-wrap:wrap}.quick-summary strong{font-size:42px;margin-left:10px}.quick-array{padding-top:106px;padding-bottom:30px;gap:12px}.quick-array .number-card{width:82px;height:106px;font-size:42px}.quick-array .position-pointer{width:120px;left:calc(50% - 60px)}.quick-array .guided-slot{padding-bottom:48px}.quick-array .index{bottom:25px}.quick-region{position:absolute;bottom:6px;font-size:13px;color:#41583d;white-space:nowrap}.quick-range{border-bottom:3px solid var(--accent)}.number-card.quick-smaller{background:#e9f2e2;border-color:#739561}.number-card.quick-larger{background:#eef0f6;border-color:#8493ad}.tabs{overflow-x:auto}.tabs button{white-space:nowrap;flex-shrink:0}
+.quick-depth{margin-top:24px;border-top:1px solid var(--line);padding-top:12px}
+.quick-depth h3{margin:0 0 10px;font-size:13px;font-weight:600}
+.quick-depth-row{display:grid;grid-template-columns:64px minmax(40px,1fr) 86px;gap:10px;align-items:center;min-height:30px;font-size:12px}
+.quick-depth-track{height:12px;background:#f0f3ef;position:relative;overflow:hidden}
+.quick-depth-bar{position:absolute;top:0;height:100%;background:#b7c9c1}
+.quick-depth-row.current{font-weight:600;color:var(--accent)}
+.quick-depth-row.current .quick-depth-bar{background:var(--accent)}
+.bucket-groups{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:24px 0}
+.bucket-group{min-width:0;border-top:2px solid var(--accent);padding-top:8px}
+.bucket-group h3{font-size:13px;margin:0 0 12px}
+.bucket-group .card-row{overflow-x:auto;min-height:100px}
+@media(max-width:700px){.bucket-groups{grid-template-columns:1fr}}
+.scan-card{flex:0 0 auto}
+.scan-label{display:block;height:28px;text-align:center;font-size:12px;font-weight:600;color:#976500}
+.quick-tree{border-top:1px solid var(--line);margin-top:20px}
+.quick-tree h3{font-size:14px}
+.quick-tree-scroll{overflow:auto;max-height:480px}
+.quick-mode .bucket-groups{grid-template-columns:repeat(2,minmax(0,1fr))}
+.quick-tree-level{display:flex;justify-content:space-around;gap:18px;min-height:100px}
+.quick-tree-level .tree-node{position:relative;flex:1}
+.quick-mode .bucket-group h3{font-size:13px;overflow-wrap:anywhere}
+.pivot-label{color:var(--accent)}
+.quick-focus-layout{display:grid;grid-template-columns:minmax(0,1fr) 230px;gap:28px}
+.quick-focus-arrays{min-width:0}
+.quick-array-scroll{overflow-x:auto;margin-bottom:24px;padding-bottom:8px}
+.quick-main-slot{flex-shrink:0;padding:5px;border:2px solid transparent;text-align:center}
+.quick-main-slot.in-call{border-color:var(--accent)}
+.quick-main-slot small{display:block;margin-top:6px;font-size:12px}
+.quick-call-outline{border-left:1px solid var(--line);padding-left:16px;min-width:0;overflow:auto;max-height:500px}
+.quick-calls,.quick-calls ul{list-style:none;margin:0;padding:0}
+.quick-calls ul{margin-left:10px;padding-left:10px;border-left:1px solid #bbc9c3}
+.quick-call-label{display:block;font-size:12px;padding:5px 3px;white-space:nowrap}
+.quick-call-label small{color:var(--muted);margin-left:4px}
+.quick-call-label.current{background:#e8f0da;color:#254b20;font-weight:600;border-left:3px solid #6e914b}
+@media(max-width:800px){.quick-focus-layout{grid-template-columns:minmax(0,1fr)}.quick-call-outline{border-left:0;border-top:1px solid var(--line);padding:16px 0 0;max-height:240px}}
+.quick-focus-arrays .quick-aligned-row{display:grid;grid-template-columns:repeat(var(--slots),minmax(0,1fr));gap:4px;width:min(100%,calc(var(--slots)*124px));min-width:0;margin-bottom:24px;align-items:start}
+.quick-aligned-row .quick-main-slot,.quick-aligned-row .scan-card{width:100%;min-width:0;padding:2px;border:2px solid transparent;box-sizing:border-box;container-type:inline-size}
+.quick-aligned-row .quick-main-slot.in-call{border-color:var(--accent)}
+.quick-aligned-row .number-card{width:100%;min-width:0;max-width:100%;height:auto;aspect-ratio:104/112;font-size:clamp(10px,30cqi,44px)}
+.quick-aligned-row .scan-label{width:100%;font-size:clamp(8px,22cqi,11px);overflow-wrap:anywhere}
+.quick-aligned-row .number-card .identity{font-size:clamp(6px,15cqi,10px);bottom:1px}
+.quick-empty-call{grid-column:1 / -1}
+.quick-mode .quick-focus-layout{grid-template-columns:minmax(0,1fr)}
+.quick-mode .quick-call-outline{border-left:0;border-top:1px solid var(--line);padding:16px 0 0;max-height:260px}
+#guided-section.quick-mode{grid-template-columns:minmax(0,1fr) minmax(330px,32%);gap:0 20px;align-items:start}
+.quick-mode .stage-panel{grid-column:1;grid-row:1}
+.quick-mode .code-panel{grid-column:2;grid-row:1 / span 2;position:sticky;top:16px}
+.quick-mode .playback{grid-column:1;grid-row:2}
+@media(max-width:950px){#guided-section.quick-mode{grid-template-columns:minmax(0,1fr)}.quick-mode .code-panel{grid-column:1;grid-row:3;position:static}}
+.quick-mode .bucket-group .card-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(48px,1fr));gap:6px;overflow:visible;align-content:start}
+.quick-mode .bucket-group .number-card{width:100%;max-width:104px;min-width:0;height:auto;aspect-ratio:104/112;font-size:20px}
+.quick-mode .bucket-group .identity{font-size:9px;bottom:2px}
+.quick-mode .quick-focus-arrays,.quick-mode .quick-array-scroll{max-width:100%;min-width:0}
+.quick-aligned-row .quick-main-slot small{font-size:clamp(7px,20cqi,12px)}
+@media(max-width:600px){.quick-mode .bucket-groups{grid-template-columns:minmax(0,1fr)}}
+.code-panel .code-content{min-width:0}
+.code-panel .code-explanation{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-style:italic;color:#3d614b;white-space:normal;line-height:1.6}
+.quick-mode .bucket-group{padding:12px;border:1px solid;border-radius:6px}
+.quick-mode .bucket-group:first-child{background:#edf5e5;border-color:#91ad76}
+.quick-mode .bucket-group:last-child{background:#eaf2fc;border-color:#89a8cf}
+.quick-mode .bucket-group:first-child h3{color:#355522}
+.quick-mode .bucket-group:last-child h3{color:#264f7c}
