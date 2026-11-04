@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#145e58"><title>Algorithm lab (made by Mingxun Zhou, with the help of Codex)</title><meta name="description" content="Move number cards and explore selection sort, insertion sort, bubble sort, merging, merge sort, quicksort, linear search, and binary search."><link rel="stylesheet" href="./style.css?v=quick-13"></head>
+<body>
+<header class="topbar"><h1>Algorithm lab <span class="title-credit">(made by Mingxun Zhou, with the help of Codex)</span></h1><button id="fullscreen" class="quiet" aria-label="Full screen" title="Full screen">⛶</button></header>
+<main>
+<nav class="tabs" aria-label="Playground mode"><button data-mode="free" aria-pressed="true">Free play</button><button data-mode="selection" aria-pressed="false">Selection sort</button><button data-mode="insertion" aria-pressed="false">Insertion sort</button><button data-mode="bubble" aria-pressed="false">Bubble sort</button><button data-mode="merge" aria-pressed="false">Merging</button><button data-mode="mergesort" aria-pressed="false">Merge sort</button><button data-mode="quick" aria-pressed="false">Quicksort</button><button data-mode="linear" aria-pressed="false">Linear search</button><button data-mode="binary" aria-pressed="false">Binary search</button><button data-mode="guess" aria-pressed="false">Alice &amp; Bob</button></nav>
+<section class="setup" aria-label="Input numbers"><form id="input-form"><div id="single-input"><label for="numbers" id="numbers-label">Numbers</label><input id="numbers" value="4, 2, 5, 1, 3" autocomplete="off" spellcheck="false"></div><div id="merge-inputs" hidden><div><label for="left-input">Left · sorted</label><input id="left-input" value="1, 4, 7" autocomplete="off"></div><div><label for="right-input">Right · sorted</label><input id="right-input" value="2, 3, 8" autocomplete="off"></div></div><div id="target-input" hidden><label for="target">Target</label><input id="target" value="3" inputmode="numeric" autocomplete="off"></div><button class="primary" type="submit">Apply</button><button id="sort-search-input" type="button" hidden>Sort list</button></form><label class="preset-label" for="example">Example<select id="example"><option value="" selected>Choose…</option value="five">5 cards</option><option value="reverse">Reversed</option><option value="duplicates">Duplicates</option><option value="random">Random</option></select></label><p id="error" role="alert" hidden></p></section>
+<section id="free-section" class="panel"><div class="panel-head"><h2>Memory slots</h2><div class="tools"><button id="undo">↶ Undo</button><button id="tidy">Line up</button><button id="reset-free">Reset</button></div></div><p class="hint">Drag to swap, or move into an empty slot.</p><div id="free-board" class="free-board" aria-label="Draggable number cards"></div><div class="memory-access" aria-live="polite"><p id="access-log"></p></div></section>
+<section id="guided-section" hidden>
+<div class="guided-layout"><div class="panel stage-panel"><div class="panel-head"><span id="cost" class="cost">Θ(n²)</span></div><div class="legend"><span><i class="dot amber"></i> Comparing</span><span><i class="dot green"></i> <span id="legend-active">Selected</span></span><span><i class="dot teal"></i> <span id="legend-done">Finished</span></span></div><div id="stage" aria-label="Algorithm visualization"></div><div class="explanation"><p id="explanation" aria-live="polite"></p></div><div class="metrics"><div><strong id="comparisons">0</strong><span>value comparisons</span></div><div><strong id="moves">0</strong><span id="moves-label">swaps</span></div></div></div>
+<aside class="panel code-panel"><div class="panel-head"><h2>Pseudocode</h2></div><ol id="code"></ol></aside></div>
+<div class="playback panel"><div class="transport"><button id="restart" title="Restart">↶ Restart</button><button id="back" aria-label="Previous step">←</button><button id="play" class="primary">▶ Play</button><button id="next" aria-label="Next step">→</button></div><label class="timeline-label" for="timeline"><span id="progress-text">1 / 1</span><input id="timeline" type="range" min="0" max="1" value="0"></label><label class="speed-label" for="speed">Speed<select id="speed"><option value="1600">Slow</option><option value="900" selected>Normal</option><option value="400">Fast</option></select></label></div>
+</section>
+
+<section id="game-section" hidden aria-label="Alice and Bob guessing game">
+<div class="game-toolbar">
+ <div class="game-modes" role="group" aria-label="Game mode"><button data-game-mode="manual" aria-pressed="true">Play yourself</button><button data-game-mode="linear" aria-pressed="false">Linear strategy</button><button data-game-mode="binary" aria-pressed="false">Binary strategy</button></div>
+ <form id="game-settings"><div><label for="game-n">Range 1…n</label><input id="game-n" value="16" inputmode="numeric" autocomplete="off"></div><div id="game-secret-setting" hidden><label for="game-secret">Alice’s secret</label><input id="game-secret" value="13" inputmode="numeric" autocomplete="off"></div><button id="game-apply" class="primary" type="submit">New game</button></form>
+</div>
+<p id="game-error" role="alert" hidden></p>
+<div class="game-layout manual">
+ <section class="panel game-board">
+  <div class="game-exchange">
+   <div class="game-person"><h2>Alice</h2><span class="person-caption">Secret</span><strong id="alice-secret">?</strong></div>
+   <div class="game-conversation"><p id="bob-question">Guess a number.</p><p id="alice-reply" aria-live="polite">Alice replies: too small, too big, or correct.</p></div>
+   <div class="game-person"><h2 id="bob-name">Bob · you</h2><span class="person-caption">Guess</span><strong id="bob-guess">—</strong></div>
+  </div>
+  <form id="game-guess-form"><label for="game-guess-input">Your guess</label><input id="game-guess-input" inputmode="numeric" autocomplete="off" placeholder="1–16"><button id="submit-guess" class="primary" type="submit">Ask Alice</button></form>
+  <div class="game-range"><span id="game-candidates-label">Candidates: 1…16</span><span><strong id="game-calls">0</strong> guesses / AskAlice calls</span></div>
+  <div id="game-candidates" class="candidate-grid" aria-label="Possible secret numbers"></div>
+  <p id="game-status" class="game-status" aria-live="polite"></p>
+ </section>
+ <aside id="game-code-panel" class="panel code-panel" hidden><div class="panel-head"><h2>Pseudocode</h2></div><ol id="game-code"></ol></aside>
+</div>
+<div id="game-playback" class="playback panel" hidden><div class="transport"><button id="game-restart">↶ Restart</button><button id="game-back" aria-label="Previous game step">←</button><button id="game-play" class="primary">▶ Play</button><button id="game-next" aria-label="Next game step">→</button></div><label class="timeline-label" for="game-timeline"><span id="game-progress">1 / 1</span><input id="game-timeline" type="range" min="0" max="1" value="0"></label><label class="speed-label" for="game-speed">Speed<select id="game-speed"><option value="1600">Slow</option><option value="900" selected>Normal</option><option value="400">Fast</option></select></label></div>
+<section class="panel game-history"><div class="panel-head"><h2>Guesses</h2></div><div class="history-scroll"><table><thead><tr><th>Call</th><th>Bob guesses</th><th>Alice replies</th></tr></thead><tbody id="game-history-body"></tbody></table></div></section>
+</section>
+
+</main><script src="./engine.js?v=quick-13"></script><script src="./game.js?v=quick-13"></script><script src="./app.js?v=quick-13"></script>
+</body></html>
